@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Voxtral Realtime vLLM Demo</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="page">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">Realtime Speech Transcription</p>
+          <h1>Voxtral Mini 4B + vLLM</h1>
+          <p class="lede">
+            A lightweight browser demo that streams microphone audio to a vLLM
+            Realtime API server and renders live transcription.
+          </p>
+        </div>
+        <div class="status-card">
+          <div class="status-row">
+            <span class="label">Connection</span>
+            <span id="connectionStatus" class="pill">Disconnected</span>
+          </div>
+          <div class="status-row">
+            <span class="label">Mic</span>
+            <span id="micStatus" class="pill">Idle</span>
+          </div>
+          <div class="status-row">
+            <span class="label">Sample Rate</span>
+            <span id="rateStatus" class="pill">--</span>
+          </div>
+          <div class="status-row">
+            <span class="label">Last Close</span>
+            <span id="closeStatus" class="pill">—</span>
+          </div>
+        </div>
+      </header>
+
+      <main class="grid">
+        <section class="panel">
+          <h2>Connect</h2>
+          <div class="field">
+            <label for="wsUrl">vLLM Realtime URL</label>
+            <input id="wsUrl" type="text" value="ws://dgxspark.local:8000/v1/realtime" />
+            <small>Must point at a vLLM server that supports the Realtime API.</small>
+          </div>
+          <div class="field">
+            <label for="model">Model</label>
+            <input id="model" type="text" value="mistralai/Voxtral-Mini-4B-Realtime-2602" />
+          </div>
+          <div class="field">
+            <label for="chunkMs">Chunk Size (ms)</label>
+            <input id="chunkMs" type="number" min="40" max="400" step="10" value="80" />
+          </div>
+          <div class="field checkbox">
+            <label>
+              <input id="autoReconnect" type="checkbox" checked />
+              Auto-reconnect
+            </label>
+            <small>Retries connection with exponential backoff.</small>
+          </div>
+          <div class="actions">
+            <button id="connectBtn" class="primary">Connect</button>
+            <button id="disconnectBtn" class="ghost" disabled>Disconnect</button>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h2>Record</h2>
+          <p class="hint">Use headphones to avoid feedback. Speech is sent as 16kHz PCM16 chunks.</p>
+          <div class="actions">
+            <button id="startBtn" class="primary" disabled>Start Mic</button>
+            <button id="stopBtn" class="ghost" disabled>Stop Mic</button>
+            <button id="commitBtn" class="ghost" disabled>Finalize Segment</button>
+          </div>
+          <div class="meter">
+            <div id="level" class="meter-fill"></div>
+          </div>
+        </section>
+
+        <section class="panel wide">
+          <div class="panel-header">
+            <h2>Live Transcript</h2>
+            <button id="clearBtn" class="ghost">Clear</button>
+          </div>
+          <div id="transcript" class="transcript">
+            <p class="placeholder">Waiting for audio…</p>
+          </div>
+          <div class="partial">
+            <span class="label">Partial</span>
+            <span id="partialText">—</span>
+          </div>
+        </section>
+      </main>
+
+      <footer>
+        <p>
+          Built for the Voxtral Mini 4B Realtime model and vLLM Realtime API.
+          See README for setup instructions.
+        </p>
+      </footer>
+    </div>
+
+    <script type="module" src="app.js"></script>
+  </body>
+</html>
